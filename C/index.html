@@ -1,0 +1,509 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>곤지암골프클럽 | C 타입</title>
+<link rel="preload" href="assets/font/web/LGSmartUI-SemiBold.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="assets/font/web/AritaBuriKR-SemiBold.woff2" as="font" type="font/woff2" crossorigin>
+<style>
+/* 원본 폰트 (assets/font/web, KS X 1001 한글 2350자 + 사용 문자 서브셋 WOFF2) */
+@font-face{font-family:'LG Smart UI';font-weight:300;font-style:normal;font-display:swap;src:url('assets/font/web/LGSmartUI-Light.woff2') format('woff2')}
+@font-face{font-family:'LG Smart UI';font-weight:400;font-style:normal;font-display:swap;src:url('assets/font/web/LGSmartUI-Regular.woff2') format('woff2')}
+@font-face{font-family:'LG Smart UI';font-weight:600;font-style:normal;font-display:swap;src:url('assets/font/web/LGSmartUI-SemiBold.woff2') format('woff2')}
+@font-face{font-family:'LG Smart UI';font-weight:700;font-style:normal;font-display:swap;src:url('assets/font/web/LGSmartUI-Bold.woff2') format('woff2')}
+@font-face{font-family:'Arita Buri KR';font-weight:500;font-style:normal;font-display:swap;src:url('assets/font/web/AritaBuriKR-Medium.woff2') format('woff2')}
+@font-face{font-family:'Arita Buri KR';font-weight:600;font-style:normal;font-display:swap;src:url('assets/font/web/AritaBuriKR-SemiBold.woff2') format('woff2')}
+@font-face{font-family:'Arita Buri KR';font-weight:700;font-style:normal;font-display:swap;src:url('assets/font/web/AritaBuriKR-Bold.woff2') format('woff2')}
+</style>
+<style>
+:root{
+  /* 1 design px: 1920×1080 시안 기준, 가로·세로 중 작은 쪽에 맞춰 축소/확대 (잘림 방지) */
+  --s:clamp(.5px, min(calc(100vw / 1920), calc(100vh / 1080)), 1.4px);
+  --serif:'Arita Buri KR',serif;
+  --sans:'LG Smart UI',system-ui,-apple-system,'Apple SD Gothic Neo',sans-serif;
+  --ink:#13221A; --gold:#987435;
+  --dwell:2.8s; --swap:1.2s;   /* 배경 전환 주기 5.6s → 4.0s */
+  --roll:cubic-bezier(.62,.02,.18,1);   /* 부드러운 가속→감속, 오버슈트 없음 */
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
+body{word-break:keep-all;overflow-wrap:anywhere;font-family:var(--sans);color:#fff;background:#0f1a14;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+a{color:inherit;text-decoration:none}
+img{display:block;max-width:100%}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+
+/* ===== key visual : PC는 한 화면 고정 그리드 ===== */
+.kv{position:relative;isolation:isolate;overflow:hidden;
+  height:100vh;height:100svh;min-height:560px;
+  display:grid;
+  grid-template-columns:auto minmax(calc(40*var(--s)),1fr) auto auto;
+  grid-template-rows:auto minmax(0,1fr) auto;
+  grid-template-areas:
+    "hd   hd hd    hd"
+    "copy .  box   box"
+    "ft   .  stats badge";
+  padding:0 calc(60*var(--s)) calc(48*var(--s));
+}
+.bg{position:absolute;inset:0;z-index:-2}
+.bg figure{position:absolute;inset:0;opacity:0;transition:opacity var(--swap) cubic-bezier(.4,0,.2,1)}
+.bg figure.on{opacity:1}
+.bg img{width:100%;height:100%;object-fit:cover;transform:scale(1.08);transition:transform calc(var(--dwell) + var(--swap) * 2) linear}
+.bg figure.on img{transform:scale(1)}
+.bg::after{content:"";position:absolute;inset:0;background:
+  linear-gradient(180deg,rgba(8,14,10,.38) 0%,rgba(8,14,10,0) 18%,rgba(8,14,10,0) 58%,rgba(8,14,10,.58) 100%),
+  linear-gradient(90deg,rgba(8,14,10,.22) 0%,rgba(8,14,10,0) 40%),
+  rgba(23,37,34,.12)}
+
+/* header (상단 고정) */
+.hd{grid-area:hd;display:flex;align-items:center;gap:calc(70*var(--s));padding-top:calc(41*var(--s));height:calc(91*var(--s));z-index:5}   /* 행 높이 고정: 버튼 유무와 관계없이 로고 위치 동일 */
+.hd .home{flex:none;display:block}
+.hd .logo{width:calc(136*var(--s))}
+.hd .nav{margin-left:auto;display:flex;gap:calc(100*var(--s));font-weight:700;font-size:calc(20*var(--s))}
+.hd .nav a{position:relative}
+.hd .nav a::after{content:"";position:absolute;left:0;right:0;bottom:-6px;height:1px;background:#fff;transform:scaleX(0);transform-origin:right;transition:transform .4s}
+.hd .nav a:hover::after{transform:scaleX(1);transform-origin:left}
+.member{display:flex;align-items:center;height:calc(50*var(--s));padding:0 calc(16*var(--s));background:#fff;color:var(--ink);font-weight:600;font-size:calc(18*var(--s));letter-spacing:-.02em;border-radius:2px;white-space:nowrap}
+.burger{display:none}
+/* 처음 방문안내 (914:12073): 메뉴와 60, 회원고객전용과 20 간격 (헤더 기본 간격 70 보정) */
+.hd .visit{margin-left:calc(-10*var(--s))}
+.hd .visit + .member{margin-left:calc(-50*var(--s))}
+/* 로그인 헤더 사용자 (914:13384): 메뉴 끝 → | 39, | → 이름 44, 블록 118×20, 오른쪽 60 */
+.hd .user{align-items:center;width:calc(118*var(--s));margin-left:calc(-31*var(--s));font-weight:600;font-size:calc(15*var(--s));letter-spacing:-.02em;white-space:nowrap}
+.hd .user .bar{font-style:normal;width:calc(44*var(--s));opacity:.9}
+.hd .user span{flex:1}
+.hd .user svg{flex:none;width:calc(20*var(--s));height:calc(20*var(--s))}
+/* 로그인 헤더 세로 위치: 로고 y40 · 메뉴 y51 · 사용자 y53 */
+@media (min-width:769px){
+  body.is-member .hd{align-items:flex-start;padding-top:calc(40*var(--s))}
+  body.is-member .hd .nav.only-m{margin-top:calc(11*var(--s))}
+  body.is-member .hd .user{margin-top:calc(13*var(--s))}
+}
+
+/* 좌측 중앙 카피 */
+.keycopy{grid-area:copy;align-self:center;margin-left:calc(138*var(--s));padding-bottom:calc(30*var(--s))}
+.keycopy h1{font-family:var(--serif);font-weight:600;font-size:calc(52*var(--s));line-height:1.24;letter-spacing:-.02em;white-space:nowrap}
+.keycopy h1 br.m{display:none}
+.keycopy p{font-weight:600;font-size:calc(28*var(--s));letter-spacing:-.02em;margin-top:calc(40*var(--s));white-space:nowrap}
+.keycopy img{width:calc(112*var(--s));margin-top:calc(20*var(--s))}
+
+/* 우측 소개 박스 (하단 정보 위에 정렬) */
+.box{grid-area:box;align-self:end;justify-self:end;position:relative;
+  width:calc(448*var(--s));margin:0 calc(100*var(--s)) calc(56*var(--s)) 0;
+  padding:calc(36*var(--s)) calc(32*var(--s));
+  background:rgba(243,243,243,.1);backdrop-filter:blur(30px) saturate(1.1);-webkit-backdrop-filter:blur(30px) saturate(1.1)}
+.box .slide{transition:opacity .6s,transform .8s cubic-bezier(.2,.7,.2,1)}
+.box .slide:not(.on){position:absolute;inset:calc(36*var(--s)) calc(32*var(--s)) auto;opacity:0;transform:translateY(14px);pointer-events:none}
+.box p .pb{display:none}
+.box h2{font-weight:600;font-size:calc(28*var(--s));line-height:1.3;letter-spacing:-.02em;margin-bottom:calc(20*var(--s))}
+.box p{font-weight:600;font-size:calc(18*var(--s));line-height:1.3;letter-spacing:-.02em;white-space:pre-line}
+
+/* 하단 우측: 숫자 + 배지 */
+.stats{grid-area:stats;align-self:center;display:flex;gap:calc(100*var(--s));margin-right:calc(39*var(--s))}
+.stat{display:flex;flex-direction:column;align-items:flex-start}
+.num{--cell:1.24em;display:flex;font-family:var(--serif);font-weight:600;font-size:calc(46*var(--s));line-height:var(--cell);height:var(--cell);font-variant-numeric:tabular-nums}
+.num .d{position:relative;display:block;height:var(--cell);overflow:hidden}
+.num .d .s{display:flex;flex-direction:column;will-change:transform;backface-visibility:hidden}
+.num .d .s i{display:block;height:var(--cell);line-height:var(--cell);font-style:normal;text-align:center}
+.num .sep{display:block}
+.stat em{font-style:normal;font-weight:600;font-size:calc(18*var(--s));letter-spacing:-.02em;margin-top:2px;white-space:nowrap}
+
+.badge{grid-area:badge;align-self:end;position:relative;width:calc(160*var(--s));height:calc(160*var(--s));margin-right:calc(20*var(--s));display:grid;place-items:center}
+.badge svg{position:absolute;inset:0;width:100%;height:100%;animation:spin 10s linear infinite;overflow:visible}
+.badge text{fill:#fff;font-family:var(--sans);font-weight:600;font-size:13px;letter-spacing:.06em}
+.badge img{width:30%;transform:translateY(4%)}
+@keyframes spin{to{transform:rotate(-360deg)}}   /* counter-clockwise */
+
+/* 우측 중앙 네비게이션 */
+.indi{position:absolute;right:calc(60*var(--s));top:50%;transform:translateY(-50%);display:flex;flex-direction:column;align-items:center;gap:calc(28*var(--s));z-index:4}
+.indi button{width:6px;height:6px;background:rgba(255,255,255,.6);transition:height .9s cubic-bezier(.7,0,.2,1),width .9s,background .5s}
+.indi button.on{width:1px;height:calc(84*var(--s));background:#fff}
+.indi button::before{content:"";position:absolute;inset:-10px}   /* 클릭 영역 확대 */
+.indi button{position:relative}
+
+/* 하단 좌측: 약관·사업자 정보 */
+.ft{grid-area:ft;align-self:end;margin-bottom:calc(10*var(--s))}
+.ft nav{display:flex;gap:calc(100*var(--s));padding-left:calc(10*var(--s));font-weight:700;font-size:calc(20*var(--s))}
+.ft nav a{white-space:nowrap}
+.ft nav .lang{display:inline-flex;align-items:center;gap:calc(10*var(--s))}   /* 914:12281 */
+.ft nav .lang svg{width:calc(24*var(--s));height:calc(24*var(--s))}
+.ft nav .lang span{min-width:calc(60*var(--s))}   /* 시안: 텍스트 영역 60 + 간격 10 */
+.ft hr{border:0;height:1px;background:rgba(255,255,255,.4);margin:calc(22*var(--s)) 0 calc(16*var(--s))}
+.ft address{font-style:normal;font-size:calc(13*var(--s));line-height:1.42;padding-left:calc(10*var(--s));opacity:.95;white-space:nowrap;letter-spacing:-.02em}
+
+/* 세로가 낮은 와이드 화면: 하단 여백 압축 */
+@media (min-width:769px) and (max-aspect-ratio:16/10){
+  .keycopy{padding-bottom:0}
+}
+
+/* ===== 회원 로그인 상태 (C-1 login) ===== */
+.only-m{display:none}
+body.is-member .only-g{display:none}
+body.is-member .kv{grid-template-areas:
+    "hd    hd hd    hd"
+    "mcopy .  mcal  mcal"
+    "ft    .  stats badge"}
+body.is-member .only-m{display:block;animation:enter .9s cubic-bezier(.2,.7,.2,1) backwards;animation-delay:var(--d,0s)}   /* backwards: 끝난 뒤 애니메이션이 남지 않아 자식의 배경 블러(backdrop-filter)가 동작 */
+body.is-member .nav.only-m,body.is-member .notice.only-m,body.is-member .user.only-m{display:flex}
+@keyframes enter{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:none}}
+.nav.only-m{gap:calc(100*var(--s))}
+/* 헤더 메뉴: 로그인 전 3개 / 로그인 후 7개 (.hd .nav의 display보다 우선) */
+.hd .nav.only-m{display:none}
+body.is-member .hd .nav.only-g{display:none}
+body.is-member .hd .nav.only-m{display:flex}
+
+.mcopy{grid-area:mcopy;align-self:center;margin-left:calc(138*var(--s));width:calc(440*var(--s))}
+.mcopy h1{font-family:var(--serif);font-weight:600;font-size:calc(52*var(--s));line-height:1.24;letter-spacing:-.02em;white-space:nowrap}
+.rsv{margin-top:calc(64*var(--s))}
+.rsv-head{display:flex;justify-content:space-between;align-items:center;font-size:calc(16*var(--s));font-weight:600;padding-bottom:calc(14*var(--s));border-bottom:1px solid rgba(255,255,255,.4);margin-bottom:calc(16*var(--s))}
+.rsv-head b{font-weight:700}
+.rsv-card{display:flex;align-items:center;justify-content:space-between;gap:calc(16*var(--s));min-height:calc(106*var(--s));padding:calc(20*var(--s));margin-bottom:calc(8*var(--s));border-radius:2px;color:#221F1F;
+  background:rgba(243,243,243,.28);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px)}   /* 1:970 Glass 20, #F3F3F3 28% */
+.rsv-card .st{font-size:calc(12*var(--s));font-weight:700;color:#003C25}
+.rsv-card .dt{font-size:calc(20*var(--s));font-weight:700;margin:calc(4*var(--s)) 0;letter-spacing:-.02em}
+.rsv-card .info{font-size:calc(14*var(--s));font-weight:600}
+.rsv-card .info i{font-style:normal;margin:0 .45em;opacity:.7}
+.rsv-card a{flex:none;background:#fff;color:var(--ink);font-size:calc(14*var(--s));font-weight:600;padding:calc(8*var(--s)) calc(10*var(--s));border-radius:2px;white-space:nowrap}
+
+.mcal{grid-area:mcal;align-self:end;justify-self:end;width:calc(408*var(--s));margin:0 calc(100*var(--s)) calc(48*var(--s)) 0}
+.notice{display:flex;gap:calc(12*var(--s));align-items:center;padding:calc(10*var(--s)) calc(12*var(--s));font-size:calc(15*var(--s));white-space:nowrap;overflow:hidden;
+  background:rgba(243,243,243,.08);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-radius:2px}   /* 1:1089 Glass 20, #F3F3F3 8% */
+.notice b{font-weight:300;opacity:.85;flex:none}
+.notice span{font-weight:600;overflow:hidden;text-overflow:ellipsis}
+.cal{margin-top:calc(12*var(--s));background:#fff;color:#221F1F;padding:calc(24*var(--s));border-radius:2px;box-shadow:0 10px 40px rgba(0,0,0,.18)}
+.cal-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:calc(16*var(--s))}
+.cal-head strong{font-size:calc(22*var(--s));font-weight:600}
+.cal-head button{width:calc(32*var(--s));height:calc(32*var(--s));display:inline-grid;place-items:center;font-size:calc(20*var(--s));color:#1a1a1a}
+.cal-head button:first-of-type{color:#bbb}
+.week,.days{display:grid;grid-template-columns:repeat(7,1fr);text-align:center}
+.week{font-size:calc(13*var(--s));color:#666;padding:calc(6*var(--s)) 0}
+.week span:first-child{color:#E9192D} .week span:last-child{color:#3D619F}
+.days button{display:flex;flex-direction:column;align-items:center;gap:calc(4*var(--s));height:calc(63*var(--s));padding-top:calc(8*var(--s));border-radius:4px;color:#221F1F;transition:background .25s}
+.days button b{font-size:calc(15*var(--s));font-weight:500}
+.days button em{font-style:normal;font-size:calc(11*var(--s));letter-spacing:-.04em;color:#221F1F}
+.days button.sun b{color:#E9192D} .days button.sat b{color:#3D619F}
+.days button.past b{color:#bfbfbf}
+.days button.off em{color:#a6a6a6}
+.days button.today{background:#F1E9DF}
+.days button.open:hover{background:#f4f4f4}
+.days button.sel{background:#003C25} .days button.sel b,.days button.sel em{color:#fff}
+.days button:disabled{cursor:default}
+.cta{display:flex;align-items:center;justify-content:center;width:100%;height:calc(54*var(--s));margin-top:calc(16*var(--s));background:#003C25;color:#fff;font-size:calc(18*var(--s));font-weight:700;border-radius:2px;transition:background .3s}
+.cta:hover{background:#0b5236}
+
+/* intro fade */
+.reveal{opacity:0;transform:translateY(18px);transition:opacity 1s cubic-bezier(.2,.7,.2,1),transform 1.2s cubic-bezier(.2,.7,.2,1)}
+.ready .reveal{opacity:1;transform:none}
+
+/* ===== mobile (MOB_C 360 기준) ===== */
+@media (max-width:768px){
+  :root{--m:calc(100vw / 360)}
+  .kv{display:flex;flex-direction:column;height:auto;min-height:100svh;padding:0}
+  .keycopy,.box,.stats,.badge,.ft{margin-left:0;margin-right:0;align-self:auto;justify-self:auto}
+  .keycopy h1,.keycopy p{white-space:normal}
+  .indi{transform:none}
+  .hd,.keycopy,.box,.stats,.badge,.indi,.ft{position:relative;left:auto;right:auto;top:auto;width:auto}
+  .hd{height:calc(56*var(--m));display:flex;align-items:center;justify-content:space-between;padding:0 calc(8*var(--m)) 0 calc(16*var(--m))}   /* 415:4586 / 메뉴 44×44, 오른쪽 8 */
+  .hd .logo{position:static;width:auto;height:calc(28*var(--m))}
+  .hd{gap:0}
+  .hd .nav{display:none}
+  .hd .visit{display:none}   /* 모바일 시안에 없음 */
+  .hd .act{display:flex;align-items:center;gap:calc(4*var(--m))}
+  .member{position:static;height:calc(32*var(--m));padding:0 calc(10*var(--m));font-size:calc(14*var(--m));font-weight:600}
+  .burger{display:block;width:calc(44*var(--m));height:calc(44*var(--m));padding:0}   /* 914:12929 */
+  .burger svg{display:block;width:100%;height:100%}
+  /* 로그인 헤더 (358:1703): 로고 x20 85×28 · 사용자 74×20(x232) · 메뉴 */
+  body.is-member .hd{padding-left:calc(20*var(--m))}
+  .hd .user{width:auto;margin:0 calc(-2*var(--m)) 0 0;gap:calc(4*var(--m));font-size:calc(15*var(--m))}
+  .hd .user .bar{display:none}
+  .hd .user span{flex:none}
+  .hd .user svg{width:calc(20*var(--m));height:calc(20*var(--m))}
+  .keycopy{padding:calc(44*var(--m)) calc(24*var(--m)) 0}
+  .keycopy h1{font-size:calc(30*var(--m));line-height:1.24}
+  .keycopy h1 br.d{display:none}
+  .keycopy h1 br.m{display:inline}
+  .keycopy p{font-size:calc(18*var(--m));line-height:1.3;margin-top:calc(14*var(--m));font-weight:600}
+  .keycopy img{width:calc(77*var(--m));margin-top:calc(12*var(--m))}
+  .badge{align-self:flex-end;width:calc(100*var(--m));height:calc(100*var(--m));margin:calc(19*var(--m)) calc(14*var(--m)) calc(-19*var(--m)) 0;z-index:1}
+  /* 순서: 카피 → 배지 → 수치 → 소개 박스 → 푸터 */
+  .hd{order:0} .keycopy{order:1} .badge{order:2} .stats{order:3} .box{order:4} .ft{order:5}
+  .badge text{font-size:13px}
+  .box{width:auto;margin:0 calc(16*var(--m));min-height:0;padding:calc(22*var(--m)) calc(20*var(--m))}
+  .box .slide:not(.on){inset:calc(22*var(--m)) calc(20*var(--m)) auto}
+  .box h2{font-size:calc(22*var(--m));margin-bottom:calc(12*var(--m))}
+  .box p{font-size:calc(15*var(--m));line-height:1.55;font-weight:400;white-space:normal;word-break:normal}   /* 시안: 글자 단위 줄바꿈 */
+  .box p .pb{display:block;height:1.55em}   /* 문단 사이 빈 줄 */
+  .stats{margin:0;justify-content:space-between;gap:0;padding:calc(16*var(--m)) calc(24*var(--m)) calc(20*var(--m))}
+  .stat{align-items:center}
+  .num{font-size:calc(32*var(--m))}
+  .stat em{font-size:calc(16*var(--m));margin-top:calc(2*var(--m))}
+  .indi{display:none}
+  .ft{margin:0;padding:calc(32*var(--m)) calc(24*var(--m)) calc(32*var(--m))}
+  .ft nav{gap:calc(28*var(--m));font-size:calc(14*var(--m));padding:0;align-items:center}
+  .ft nav .lang{gap:calc(4*var(--m))} .ft nav .lang span{min-width:0} .ft nav .lang svg{width:calc(24*var(--m));height:calc(24*var(--m))}
+  .ft hr{margin:calc(14*var(--m)) 0}
+  .ft address{font-size:calc(12*var(--m));line-height:1.42;padding:0;opacity:.85;white-space:normal}
+  .ft address span{display:block}
+  .ft address .sep{display:none}
+  .ft address br{display:none}
+  /* 회원 로그인 상태 (모바일) */
+  .hd .nav,.hd .nav.only-m,body.is-member .hd .nav.only-m{display:none}
+  .hd .home{flex:none;display:block}
+  .hd .logo{max-width:none}
+  body.is-member .mcopy, body.is-member .mcal{display:contents}
+  body.is-member .hd{order:0} body.is-member .greet{order:1} body.is-member .notice{order:2}
+  body.is-member .rsv{order:3} body.is-member .cal{order:4} body.is-member .badge{order:5}
+  body.is-member .stats{order:6} body.is-member .ft{order:7}
+  .mcopy,.mcal{width:auto;margin:0}
+  .mcopy h1{white-space:normal;font-size:calc(28*var(--m));line-height:1.3}
+  .greet{padding:calc(48*var(--m)) calc(24*var(--m)) calc(24*var(--m))}
+  .notice{margin:0 calc(16*var(--m));font-size:calc(13*var(--m));padding:calc(10*var(--m)) calc(12*var(--m))}
+  body.is-member .notice{display:flex}
+  .rsv{margin:0;padding:calc(28*var(--m)) calc(16*var(--m)) 0}
+  .rsv-head{font-size:calc(15*var(--m));padding-bottom:calc(10*var(--m));margin-bottom:calc(10*var(--m))}
+  .rsv-card{min-height:0;padding:calc(14*var(--m)) calc(16*var(--m));gap:calc(12*var(--m))}
+  .rsv-card .st{font-size:calc(12*var(--m))} .rsv-card .dt{font-size:calc(18*var(--m))} .rsv-card .info{font-size:calc(13*var(--m))}
+  .rsv-card a{font-size:calc(13*var(--m));padding:calc(7*var(--m)) calc(10*var(--m))}
+  .cal{margin:calc(24*var(--m)) calc(16*var(--m)) 0;padding:calc(16*var(--m)) calc(12*var(--m)) calc(12*var(--m))}
+  .cal-head{margin-bottom:calc(8*var(--m))} .cal-head strong{font-size:calc(20*var(--m))}
+  .cal-head button{width:calc(28*var(--m));height:calc(28*var(--m));font-size:calc(18*var(--m))}
+  .week{font-size:calc(12*var(--m));background:#f4f4f4}
+  .days button{height:calc(52*var(--m));padding-top:calc(6*var(--m));gap:calc(2*var(--m))}
+  .days button b{font-size:calc(14*var(--m))} .days button em{font-size:calc(10*var(--m))}
+  .cta{height:calc(52*var(--m));font-size:calc(16*var(--m));margin-top:calc(12*var(--m))}
+  /* 로그인 콘텐츠 (358:1703, 상태바 제외 y): 인사 104 · 공지 214 · 예약 279 · 카드 317/417 · 캘린더 533(495) · 배지 1028 · 수치 1128(76) · 푸터 1204 */
+  body.is-member .greet{padding-bottom:calc(37*var(--m))}
+  body.is-member .notice{line-height:calc(17*var(--m));padding:calc(10*var(--m)) calc(12*var(--m))}
+  body.is-member .rsv-card{min-height:calc(92*var(--m));align-items:flex-start;padding:calc(14*var(--m)) calc(16*var(--m))}
+  body.is-member .rsv-card{margin-bottom:calc(8*var(--m))} body.is-member .rsv-card:last-child{margin-bottom:0}
+  body.is-member .rsv-card a{display:inline-flex;align-items:center;height:calc(32*var(--m));padding:0 calc(10*var(--m));margin-top:calc(16*var(--m))}
+  body.is-member .cal{padding:calc(12*var(--m))}
+  body.is-member .cal-head{height:calc(32*var(--m));margin-bottom:calc(8*var(--m))}
+  body.is-member .week{height:calc(28*var(--m));display:grid;align-items:center;padding:0;background:none}
+  body.is-member .days button{height:calc(66*var(--m));padding-top:calc(10*var(--m));gap:calc(6*var(--m))}
+  body.is-member .cta{height:calc(53*var(--m));margin-top:calc(20*var(--m))}
+  body.is-member .badge{margin:0 calc(14*var(--m)) 0 0}
+  body.is-member .stats{height:calc(76*var(--m));padding:calc(12*var(--m)) calc(24*var(--m)) 0;align-items:flex-start}
+  body.is-member .num{font-size:calc(30*var(--m))}
+  body.is-member .stat em{font-size:calc(13*var(--m))}
+  .bg::after{background:linear-gradient(180deg,rgba(13,23,18,.55) 0%,rgba(13,23,18,.1) 28%,rgba(13,23,18,.05) 55%,rgba(10,18,13,.75) 100%)}
+}
+@media (min-width:769px){ .hd .act{display:contents} }
+/* 로고 위치 통일: 로그인 전·후 모두 x60 y40 (914:13384) */
+@media (min-width:769px){ body:not(.is-member) .hd .home{align-self:flex-start;margin-top:calc(-1*var(--s))} }
+@media (prefers-reduced-motion:reduce){
+  .badge svg{animation:none}
+  .bg img{transition:none;transform:none}
+}
+</style>
+</head>
+<body>
+<main class="kv" id="kv">
+  <div class="bg" aria-hidden="true">
+    <figure class="on"><picture><source media="(max-width:768px)" srcset="assets/bg1-m.jpg"><img src="assets/bg1.jpg" alt=""></picture></figure>
+    <figure><picture><source media="(max-width:768px)" srcset="assets/bg2-m.jpg"><img src="assets/bg2.jpg" alt=""></picture></figure>
+    <figure><picture><source media="(max-width:768px)" srcset="assets/bg3-m.jpg"><img src="assets/bg3.jpg" alt=""></picture></figure>
+  </div>
+
+  <header class="hd">
+    <a href="#" class="home" aria-label="홈"><img class="logo" src="assets/logo.png" alt="KONJIAM GOLF CLUB"></a>
+    <nav class="nav only-g"><a href="#">클럽소개</a><a href="#">코스</a><a href="#">클럽하우스</a></nav>
+    <nav class="nav only-m"><a href="#">클럽소개</a><a href="#">운영안내</a><a href="#">예약</a><a href="#">코스</a><a href="#">클럽하우스</a><a href="#">정보마당</a><a href="#">회원라운지</a></nav>
+    <div class="act">
+      <a class="member visit only-g" href="#">처음 방문안내</a>
+      <a class="member only-g" href="#member" id="toMember">회원고객전용</a>
+      <a class="user only-m" href="#" aria-label="한지훈님 내 정보"><i class="bar">|</i><span>한지훈님</span><svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><g opacity="0.9"><mask id="pf" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="0" y="0" width="20" height="20"><circle cx="10" cy="10" r="10" fill="#D9D9D9"/></mask><g mask="url(#pf)"><path d="M6.81792 11.3633C9.54519 11.3633 10.4543 11.3633 13.1816 11.3633C13.1816 17.7269 14.0906 27.2724 17.727 31.8178C14.9997 31.8178 4.99973 31.8178 2.27246 31.8178C5.90882 27.2724 6.81792 17.7269 6.81792 11.3633Z" fill="white"/><path d="M7.54694 6.22909C7.46711 5.61374 7.91273 5 8.53323 5C9.42906 5 10.5704 5 11.4662 5C12.0867 5 12.5324 5.61374 12.4525 6.22909C12.364 6.91182 12.364 7.63364 12.4525 8.31636C12.5324 8.93171 12.0867 9.54545 11.4662 9.54545C10.5704 9.54545 9.42906 9.54545 8.53323 9.54545C7.91273 9.54545 7.46711 8.93171 7.54694 8.31636C7.63551 7.63364 7.63551 6.91182 7.54694 6.22909Z" fill="white"/></g><circle cx="10" cy="10" r="9.3" stroke="white" stroke-width="1.4"/></g></svg></a>
+      <button class="burger" aria-label="메뉴"><svg viewBox="0 0 44 44" fill="none" aria-hidden="true"><rect x="12" y="14" width="20" height="2" fill="#fff"/><rect x="12" y="21" width="20" height="2" fill="#fff"/><rect x="12" y="28" width="20" height="2" fill="#fff"/></svg></button>
+    </div>
+  </header>
+
+  <section class="keycopy only-g reveal">
+    <h1>자연 속에서 나누는<br class="m"> 대화는<br class="d"> 조금 다릅니다.</h1>
+    <p>숲이 먼저 맞이하는 곳, 신뢰해온 자리.</p>
+    <img src="assets/logo.png" alt="">
+  </section>
+
+
+  <!-- 회원 로그인 상태 -->
+  <section class="mcopy only-m" aria-label="회원 정보">
+    <h1 class="greet only-m">한지훈님,<br>찾아주셔서 감사합니다.</h1>
+    <div class="rsv only-m" style="--d:.12s">
+      <div class="rsv-head"><span>MY RESERVATION</span><b>2건</b></div>
+      <div class="rsv-card"><div><p class="st">예약확정 · 평일</p><p class="dt">09.01(화) / 10시 40분</p><p class="info">Lake<i>·</i>5인승<i>·</i>캐디 1</p></div><a href="#">예약 확인</a></div>
+      <div class="rsv-card"><div><p class="st">대기접수완료 · 주말</p><p class="dt">09.12(토) / 10시 40분</p><p class="info">Lake<i>·</i>5인승<i>·</i>캐디 1</p></div><a href="#">예약 확인</a></div>
+    </div>
+  </section>
+  <section class="mcal only-m" style="--d:.2s" aria-label="라운딩 예약">
+    <p class="notice only-m"><b>공지</b><span>곤지암골프클럽 개인정보처리방침 개정 (26년 9월 17일)</span></p>
+    <div class="cal only-m">
+      <div class="cal-head"><strong>2026.09</strong><div><button aria-label="이전 달" disabled>‹</button><button aria-label="다음 달">›</button></div></div>
+      <div class="week"><span>일</span><span>월</span><span>화</span><span>수</span><span>목</span><span>금</span><span>토</span></div>
+      <div class="days"></div>
+      <a class="cta" href="#">라운딩 예약하기</a>
+    </div>
+  </section>
+
+  <a class="badge reveal" href="#" aria-label="회원전용 곤지암골프클럽 예약하기">
+    <svg viewBox="0 0 160 160" aria-hidden="true">
+      <defs><path id="ring" d="M80,80 m-58,0 a58,58 0 1,1 116,0 a58,58 0 1,1 -116,0"/></defs>
+      <text><textPath href="#ring" startOffset="2%" textLength="300" lengthAdjust="spacing">회원전용 · 곤지암골프클럽 예약하기 ·</textPath></text>
+    </svg>
+    <img src="assets/tree.png" alt="">
+  </a>
+
+  <section class="box only-g reveal" aria-live="polite">
+    <div class="slide on"><h2>곤지암골프클럽은,</h2><p>정관산 자락 깊은 골짜기를 품은 독특한 지형으로
+산봉우리를 깎아내고 일부 계곡을 메워
+생태습지를 조성하고, 연못과 주변 홀의 지면이 연속적인
+공간으로 구성되어 있습니다.<br><i class="pb"></i>
+플레이 하실 수록 자연속에서 편안함을 느끼실 수 있습니다.</p></div>
+    <div class="slide"><h2>걸어서 만나는 18홀</h2><p>곤지암GC는 18홀을 걸으며 편안하게 라운드를
+즐길 수 있도록 코스의 고저차는 45m 이내로 낮추고,
+해저드는 가급적 코스 가장자리에 배치했습니다.<br><i class="pb"></i>
+걷는 여유 속에서 자연을 즐기고
+편안한 대화까지 나눌 수 있는곳,
+곤지암GC가 생각한 라운드의 모습입니다.</p></div>
+    <div class="slide"><h2>시작되는 공간 클럽하우스</h2><p>소나무가 시그니처인 곤지암GC는
+입구부터 신선한 숲속 향기를 느끼실 수 있도록
+곤지암만의 유니크한 소나무향기로 맞이하고 있습니다.<br><i class="pb"></i>
+“자연과 사람이 하나되는 골프장"이라는 곤지암GC의
+지향점을 담고 있습니다.</p></div>
+  </section>
+
+  <section class="stats reveal">
+    <div class="stat"><span class="num" data-value="3,572" aria-label="3,572"></span><em>소나무</em></div>
+    <div class="stat"><span class="num" data-value="720" aria-label="720"></span><em>느티나무</em></div>
+    <div class="stat"><span class="num" data-value="1,538" aria-label="1,538"></span><em>단풍나무</em></div>
+  </section>
+
+  <nav class="indi" aria-label="배경 선택">
+    <button class="on" aria-label="1"></button><button aria-label="2"></button><button aria-label="3"></button>
+  </nav>
+
+  <footer class="ft reveal">
+    <nav><a href="#">약관 및 정책</a><a href="#">문의하기</a><a href="#" class="lang"><span>언어</span><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M7 9.5L12 14.5L17 9.5" stroke="#fff" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></a></nav>
+    <hr>
+    <address><span>대표이사 : 이재웅 <b class="sep">|</b></span> <span>개인정보보호책임자 : 정현 <b class="sep">|</b></span> <span>사업자등록번호 : 107-86-09325 <b class="sep">|</b></span> <span>통신판매업 등록번호 : 제2018-서울강서-0325 호</span><br>
+    <span>Copyright ⓒ 2026 D&amp;O. All Rights Reserved.</span></address>
+  </footer>
+</main>
+
+<script>
+(() => {
+  const DWELL = 2800, SWAP = 1200, INTRO_DELAY = 600, INTRO_ROLL = 2000;
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const figs = [...document.querySelectorAll('.bg figure')];
+  const slides = [...document.querySelectorAll('.box .slide')];
+  const dots = [...document.querySelectorAll('.indi button')];
+  let cur = 0, timer;
+
+  /* ---------- slot-machine numbers (끊김 없는 연속 릴) ----------
+     - 각 자리: 0~9를 BLOCKS번 반복한 고정 띠. 매 전환마다 10칸 단위로 '더' 굴려 같은 숫자에 정지
+     - 정지 후 같은 숫자의 첫 블록 위치로 되돌림 → 숫자·픽셀이 동일해 보이지 않음
+     - 칸 높이는 정수 px로 고정 → 반올림 오차로 인한 1px '달칵' 제거 */
+  const BLOCKS = 6;
+  const reels = [];
+  const nums = [...document.querySelectorAll('.num')];
+  nums.forEach(num => {
+    const chars = [...num.dataset.value];
+    let di = 0;
+    chars.forEach(ch => {
+      if (!/\d/.test(ch)) { const s = document.createElement('span'); s.className = 'sep'; s.textContent = ch; num.appendChild(s); return; }
+      const d = document.createElement('span'); d.className = 'd';
+      const s = document.createElement('span'); s.className = 's';
+      let html = ''; for (let b = 0; b < BLOCKS; b++) for (let k = 0; k < 10; k++) html += `<i>${k}</i>`;
+      s.innerHTML = html; d.appendChild(s); num.appendChild(d);
+      const r = { strip: s, digit: +ch, order: di++, pos: +ch, num };
+      s.addEventListener('transitionend', () => settle(r));
+      reels.push(r);
+    });
+  });
+  const cellOf = num => +num.dataset.cell;
+  function measure() {                               // 정수 px 칸 높이
+    nums.forEach(num => {
+      num.style.removeProperty('--cell');
+      const fs = parseFloat(getComputedStyle(num).fontSize);
+      const cell = Math.round(fs * 1.24);
+      num.dataset.cell = cell; num.style.setProperty('--cell', cell + 'px');
+    });
+    reels.forEach(r => place(r, r.pos, false));
+  }
+  function place(r, pos, animate, duration) {
+    r.strip.style.transition = animate ? `transform ${duration}ms var(--roll)` : 'none';
+    r.strip.style.transform = `translate3d(0,${-pos * cellOf(r.num)}px,0)`;
+  }
+  function settle(r) {                               // 같은 숫자의 첫 블록으로 조용히 되돌림
+    const base = r.digit;
+    if (r.pos !== base) { r.pos = base; place(r, base, false); }
+  }
+  function roll(duration) {
+    if (reduce) return;
+    reels.forEach(r => {
+      settle(r);                                     // 혹시 진행 중이면 정위치에서 출발
+      r.strip.offsetHeight;
+      const laps = 1 + Math.min(r.order, 3) * 1;     // 뒤 자릿수일수록 더 많이 회전 (시차)
+      r.pos = r.digit + laps * 10;
+      requestAnimationFrame(() => place(r, r.pos, true, duration));
+    });
+  }
+  measure();
+  addEventListener('resize', () => { clearTimeout(measure.t); measure.t = setTimeout(measure, 120); });
+  if (document.fonts) document.fonts.ready.then(measure);
+
+  /* ---------- background / copy / indicator ---------- */
+  function go(i) {
+    if (i === cur) return;
+    figs[cur].classList.remove('on'); slides[cur].classList.remove('on'); dots[cur].classList.remove('on');
+    cur = (i + figs.length) % figs.length;
+    figs[cur].classList.add('on'); slides[cur].classList.add('on'); dots[cur].classList.add('on');
+    roll(SWAP);
+  }
+  function schedule() { clearTimeout(timer); timer = setTimeout(() => { go(cur + 1); schedule(); }, DWELL + SWAP); }
+  dots.forEach((b, i) => b.addEventListener('click', () => { go(i); schedule(); }));
+
+
+  /* ---------- 회원 로그인 상태 전환 ---------- */
+  const days = document.querySelector('.days');
+  const ST = {10:'종료',11:'미오픈',12:'예약가능',13:'예약가능',14:'예약가능',15:'예약가능',16:'예약종료',17:'미오픈',18:'예약종료',19:'미오픈'};
+  for (let d = 20; d <= 30; d++) ST[d] = '예약가능';
+  const first = new Date(2026, 8, 1).getDay();          // 2026.09.01 = 화
+  let html = ''; for (let i = 0; i < first; i++) html += '<span></span>';
+  for (let d = 1; d <= 30; d++) {
+    const dow = (first + d - 1) % 7, st = ST[d] || '';
+    const cls = [dow === 0 ? 'sun' : '', dow === 6 ? 'sat' : '', d < 10 ? 'past' : '', d === 10 ? 'today' : '',
+                 st === '예약가능' ? 'open' : (st ? 'off' : '')].join(' ');
+    html += `<button class="${cls}" ${st === '예약가능' ? '' : 'disabled'} aria-label="9월 ${d}일 ${st}"><b>${d}</b>${st ? `<em>${st}</em>` : ''}</button>`;
+  }
+  days.innerHTML = html;
+  days.addEventListener('click', e => {
+    const b = e.target.closest('button.open'); if (!b) return;
+    days.querySelectorAll('.sel').forEach(x => x.classList.remove('sel')); b.classList.add('sel');
+  });
+
+  function setMember(on) {
+    if (document.body.classList.contains('is-member') === on) return;
+    document.body.classList.toggle('is-member', on);
+    history.replaceState(null, '', on ? '#member' : location.pathname + location.search);
+    scrollTo({ top: 0 });
+    roll(SWAP);                                         // 상태 전환 시 숫자도 함께 굴림
+  }
+  /* 회원고객전용 → 로그인 화면 / (로그인 상태) 로고 → 로그인 전. 그 외 링크·버튼은 전환하지 않음 */
+  document.getElementById('toMember').addEventListener('click', e => { e.preventDefault(); setMember(true); });
+  document.querySelector('.home').addEventListener('click', e => { e.preventDefault(); if (document.body.classList.contains('is-member')) setMember(false); });
+  document.addEventListener('click', e => { const a = e.target.closest('a[href="#"]'); if (a) e.preventDefault(); });
+  addEventListener('hashchange', () => setMember(location.hash === '#member'));
+  if (location.hash === '#member') document.body.classList.add('is-member');
+
+  /* ---------- intro: numbers roll first, then the cycle starts ---------- */
+  const start = () => {
+    document.body.classList.add('ready');
+    setTimeout(() => { roll(INTRO_ROLL); setTimeout(schedule, INTRO_ROLL - SWAP); }, INTRO_DELAY);
+  };
+  (document.fonts ? document.fonts.ready : Promise.resolve()).then(() => requestAnimationFrame(start));
+
+  /* pause when tab hidden */
+  document.addEventListener('visibilitychange', () => { if (document.hidden) clearTimeout(timer); else schedule(); });
+})();
+</script>
+</body>
+</html>

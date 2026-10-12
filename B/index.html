@@ -1,0 +1,470 @@
+<!doctype html>
+<html lang="ko" class="lock">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>곤지암골프클럽 | B 타입</title>
+<link rel="preload" href="assets/font/web/LGSmartUI-SemiBold.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="assets/font/web/AritaBuriKR-SemiBold.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="assets/kv-bg-x.jpg" as="image">
+<style>
+/* 원본 폰트 (assets/font/web, KS X 1001 한글 2350자 + 사용 문자 서브셋 WOFF2) */
+@font-face{font-family:'LG Smart UI';font-weight:400;font-style:normal;font-display:swap;src:url('assets/font/web/LGSmartUI-Regular.woff2') format('woff2')}
+@font-face{font-family:'LG Smart UI';font-weight:600;font-style:normal;font-display:swap;src:url('assets/font/web/LGSmartUI-SemiBold.woff2') format('woff2')}
+@font-face{font-family:'LG Smart UI';font-weight:700;font-style:normal;font-display:swap;src:url('assets/font/web/LGSmartUI-Bold.woff2') format('woff2')}
+@font-face{font-family:'Arita Buri KR';font-weight:600;font-style:normal;font-display:swap;src:url('assets/font/web/AritaBuriKR-SemiBold.woff2') format('woff2')}
+</style>
+<style>
+:root{
+  --u:calc(100vw / 1920);                                                      /* B-2: 가로 기준 */
+  --s:clamp(.5px, min(calc(100vw / 1920), calc(100vh / 1080)), 1.4px);         /* 인트로·헤더·카피: 화면 안에 맞춤 */
+  /* 키비주얼 1920×1080(914:14670): 위 하늘 240 확보를 목표로 축소(좌우는 미러 확장 160씩으로 채움, 최소 2240폭), 아주 높은 화면은 하늘 400까지 */
+  --k:max(calc(100vw / 2240), min(calc(100vw / 1920), calc(100vh / 1320)), calc(100vh / 1480));
+  --serif:'Arita Buri KR',serif;
+  --sans:'LG Smart UI',system-ui,-apple-system,'Apple SD Gothic Neo',sans-serif;
+  --ink:#201E1E; --deep:#10170D; --mist:#D2D9E1;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html.lock,html.lock body{overflow:hidden}
+body{word-break:keep-all;font-family:var(--sans);color:var(--ink);background:var(--deep);-webkit-font-smoothing:antialiased;overflow-x:hidden}
+a{color:inherit;text-decoration:none}
+img{display:block;max-width:none}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+
+/* ===== B-0 인트로 (914:13846) ===== */
+.intro{position:fixed;inset:0;z-index:50;background:var(--mist);cursor:pointer}
+.intro .col{position:absolute;left:50%;top:50%;font-weight:600;font-size:calc(36*var(--s));line-height:1.44;color:var(--ink);text-align:center;width:calc(46*var(--s))}
+.intro .col span{display:block}
+.intro .c1{margin:calc(-267*var(--s)) 0 0 calc(3*var(--s))}     /* 숲이 먼저 맞이하는 곳, */
+.intro .c2{margin:calc(-45*var(--s)) 0 0 calc(-49*var(--s))}    /* 신뢰해온 자리. */
+.intro .tree{position:absolute;left:50%;top:50%;width:calc(155*var(--s));height:calc(209*var(--s));
+  margin:calc(-95*var(--s)) 0 0 calc(-77*var(--s));
+  display:flex;align-items:center;justify-content:center}   /* image 64 (914:13851) */
+.intro .tree img{height:91%;width:auto}
+.intro .skip{position:absolute;right:calc(40*var(--s));bottom:calc(32*var(--s));font-size:13px;font-weight:600;color:rgba(32,30,30,.5);letter-spacing:.04em}
+
+/* ===== B-1 키비주얼 (914:13852) ===== */
+.hero{position:relative;height:100vh;height:100svh;min-height:560px;overflow:hidden;background:#D0D6DF}   /* 확장 하늘색 = 배경 이미지 최상단 평균색 */
+.stage{position:absolute;left:50%;bottom:0;width:calc(1920*var(--k));height:calc(1080*var(--k));transform:translateX(-50%)}   /* 하단 고정: 바닥은 항상 온전히, 화면이 16:9보다 높으면 위로 하늘 확보 */
+.stage .ly{position:absolute;will-change:transform,opacity,filter}
+.stage .ly img{width:100%;height:100%}
+/* 914:14670 레이어: KV-bg → KV-oj1(클럽하우스·소나무) → KV-oj3(표지석) → KV-oj2(전경) */
+.ly.bg  {left:calc(-160*var(--k));top:calc(-70*var(--k));width:calc(2240*var(--k));height:calc(1126*var(--k));
+  -webkit-mask-image:linear-gradient(180deg,transparent 0,#000 calc(160*var(--k)));mask-image:linear-gradient(180deg,transparent 0,#000 calc(160*var(--k)))}   /* 윗변을 하늘색에 녹여 이음새 없이 확장 */
+.ly.oj1 {left:calc(-160*var(--k));top:0;width:calc(2240*var(--k));height:calc(1080*var(--k))}
+.ly.oj3 {left:calc(532*var(--k));top:calc(889*var(--k));width:calc(880*var(--k));height:calc(157*var(--k))}
+.ly.oj2 {left:calc(-160*var(--k));top:calc(674*var(--k));width:calc(2240*var(--k));height:calc(406*var(--k))}
+.ly.bg2{display:none}
+
+/* 16:9보다 넓은 화면: 바닥을 지키느라 위가 잘리면 소나무가 헤더에 닿음 → 잘린 만큼 하늘빛 안개로 헤더 뒤를 덮음 */
+@media (min-width:769px) and (min-aspect-ratio:16/9){
+  .hero::before{content:"";position:absolute;left:0;right:0;top:0;z-index:3;pointer-events:none;
+    height:calc(max(0px, 1080*var(--k) - 100vh) + min(190*var(--s), 4*max(0px, 1080*var(--k) - 100vh)));   /* 위가 잘릴 때만 */
+    background:linear-gradient(180deg,rgba(208,214,223,.96) 0,rgba(208,214,223,.85) 45%,rgba(208,214,223,0) 100%)}
+}
+.hd{position:fixed;left:0;right:0;top:0;z-index:40;height:calc(116*var(--s));padding:0 calc(80*var(--s))}
+/* 스크롤 시 헤더 배경 (941:14730): 블러 10 + 좌→우 그라디언트 60%→30%(20.7%) */
+.hd::before{content:"";position:absolute;left:0;right:0;top:0;height:calc(115*var(--s));z-index:-1;pointer-events:none;
+  background:linear-gradient(90deg,rgba(210,217,225,.6) 0%,rgba(210,217,225,.3) 20.673%);
+  -webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);opacity:0;transition:opacity .5s ease}
+.hd.is-scrolled::before{opacity:1}
+.hd .logo{position:absolute;left:calc(80*var(--s));top:calc(40*var(--s));width:calc(136*var(--s))}
+.hd nav{position:absolute;left:0;right:0;margin:0 auto;width:max-content;top:calc(52*var(--s));display:flex;gap:calc(100*var(--s));font-weight:700;font-size:calc(20*var(--s));white-space:nowrap}
+.hd nav a{position:relative}
+.hd nav a::after{content:"";position:absolute;left:0;right:0;bottom:-6px;height:1px;background:currentColor;transform:scaleX(0);transform-origin:right;transition:transform .4s}
+.hd nav a:hover::after{transform:scaleX(1);transform-origin:left}
+.hd .act{position:absolute;right:calc(80*var(--s));top:calc(39*var(--s));display:flex;gap:calc(20*var(--s))}
+.btn{display:flex;align-items:center;height:calc(50*var(--s));padding:0 calc(16*var(--s));background:#fff;color:#13221A;border-radius:2px;font-weight:600;font-size:calc(18*var(--s));letter-spacing:-.02em;white-space:nowrap}
+.burger{display:none}
+.hd .line{position:absolute;left:calc(80*var(--s));right:calc(80*var(--s));top:calc(115*var(--s));height:1px;background:rgba(0,19,18,.4);transform-origin:left}
+
+.copy{position:absolute;left:0;right:0;top:max(calc(146*var(--s)), calc(100% - 768*var(--k)));z-index:4;   /* 장면 기준 y312(=하단에서 768), 헤더와는 최소 30 간격 */
+  
+  font-family:var(--serif);font-weight:600;font-size:calc(44*var(--s));line-height:1.44;letter-spacing:-.02em;color:#142016;text-align:center;white-space:nowrap}
+.copy span{display:block}
+
+/* ===== B-2 사진 콜라주 (914:13875) ===== */
+.gal{position:relative;height:calc(1828*var(--u));background:var(--deep);overflow:hidden}
+.ph{position:absolute;overflow:hidden}
+.ph img{width:100%;height:100%;object-fit:cover}
+.ph.view  {left:0;                 top:calc(85*var(--u));  width:calc(613*var(--u));height:calc(892*var(--u))}
+.ph.course{left:calc(1306*var(--u));top:0;                 width:calc(614*var(--u));height:calc(941*var(--u))}
+.ph.glove {left:0;                 top:calc(1017*var(--u));width:calc(613*var(--u));height:calc(731*var(--u))}
+.ph.food  {left:calc(653*var(--u)); top:calc(941*var(--u)); width:calc(613*var(--u));height:calc(794*var(--u))}
+.ph.cart  {left:calc(1307*var(--u));top:calc(981*var(--u)); width:calc(613*var(--u));height:calc(731*var(--u))}
+.emblem{position:absolute;left:calc(653*var(--u));top:calc(211*var(--u));width:calc(613*var(--u));height:calc(690*var(--u));display:grid;place-items:center;background:var(--deep)}
+
+/* B-1 ↔ B-2 교차: 처음엔 겹침 없음(943:14794) → 스크롤하면 메인도 함께 올라가고 B-2가 조금 더 빨리 올라와 240만큼 살짝 덮음(943:14802).
+   B-2 상단 240은 투명(찢긴 사진 가장자리 사이로 B-1이 보임) */
+@media (min-width:769px){
+  .gal{z-index:1;margin-top:calc(-240*var(--u));transform:translateY(calc(240*var(--u)));
+    background:linear-gradient(180deg,transparent 0,transparent calc(240*var(--u)),var(--deep) calc(240*var(--u)))}
+  .ft{z-index:1}
+}
+.emblem i{display:block;width:calc(240*var(--u));height:calc(352*var(--u));transform:translateY(calc(-9*var(--u)))}
+.emblem i img{width:100%;height:100%;object-fit:contain}
+
+/* 푸터 (914:13912) */
+.ft{position:relative;height:calc(244*var(--u));background:var(--deep);color:#fff}
+.ft .logo{position:absolute;left:calc(80*var(--u));top:calc(50*var(--u));width:calc(136*var(--u))}
+.ft nav{position:absolute;left:calc(1385*var(--u));top:calc(61*var(--u));display:flex;align-items:center;gap:calc(100*var(--u));font-weight:700;font-size:calc(20*var(--u));white-space:nowrap}
+.ft .lang{display:inline-flex;align-items:center;gap:calc(10*var(--u))}
+.ft .lang span{min-width:calc(60*var(--u))}
+.ft .lang svg{width:calc(24*var(--u));height:calc(24*var(--u))}
+.ft hr{position:absolute;left:calc(80*var(--u));right:calc(80*var(--u));top:calc(119*var(--u));border:0;height:1px;background:rgba(255,255,255,.4)}
+.ft address{position:absolute;left:calc(90*var(--u));top:calc(135*var(--u));font-style:normal;font-weight:400;font-size:calc(14*var(--u));line-height:1.42;white-space:nowrap}
+.ft address span{display:block}
+.ft address .m{display:none}
+
+/* ===== 회원 로그인 화면 (914:13926) — 회원고객전용 클릭 / #member ===== */
+.m-only{display:none}
+.hd nav .m-item{display:none}
+body.is-member .hd nav .m-item{display:inline}
+.member{display:none}
+body.is-member .g-only{display:none}
+body.is-member .hero, body.is-member .gal{display:none}
+body.is-member .member{display:block}
+body.is-member .hd .user{display:flex}
+.hd .user{align-items:center;gap:calc(4*var(--s));margin-top:calc(15*var(--s));font-weight:600;font-size:calc(15*var(--s));letter-spacing:-.02em;white-space:nowrap}
+.hd .user svg{width:calc(20*var(--s));height:calc(20*var(--s))}
+
+.member{position:relative;height:100vh;height:100svh;min-height:600px;overflow:hidden;color:#fff;background:var(--deep)}
+.mbg{position:absolute;inset:0}
+.mbg img{width:100%;height:100%;object-fit:cover;object-position:50% 40%}
+.mcopy{position:absolute;left:calc(176*var(--s));top:calc(50% - 110*var(--s));font-family:var(--serif);font-weight:600;font-size:calc(44*var(--s));line-height:1.24;letter-spacing:-.02em;text-shadow:0 2px 24px rgba(0,0,0,.18)}
+.mcopy span{display:block}
+.myres{position:absolute;right:calc(80*var(--s));bottom:calc(184*var(--s));width:calc(388*var(--s));height:calc(224*var(--s));padding:calc(32*var(--s)) calc(40*var(--s));background:#2D433B}
+.myres-top{display:flex;justify-content:space-between;align-items:center;font-size:calc(16*var(--s));letter-spacing:-.02em}
+.myres-top b{font-weight:700}
+.tag{background:#fff;border:1px solid #987435;color:#987435;border-radius:100px;padding:calc(6*var(--s)) calc(12*var(--s));font-size:calc(13*var(--s));font-weight:600;line-height:1.3}
+.myres .kind{margin-top:calc(22*var(--s));font-weight:600;font-size:calc(18*var(--s));line-height:1.3}
+.myres .when{margin-top:calc(2*var(--s));font-weight:700;font-size:calc(32*var(--s));line-height:1.3;letter-spacing:-.02em;white-space:nowrap}
+.myres .info{margin-top:calc(14*var(--s));font-weight:600;font-size:calc(18*var(--s));line-height:1.3}
+.myres .info i{font-style:normal;margin:0 calc(8*var(--s))}
+.band{position:absolute;left:calc(80*var(--s));right:calc(80*var(--s));bottom:0;height:calc(184*var(--s));display:flex;color:#221F1F}
+.wx{position:relative;flex:none;width:calc(280*var(--s));background:#F1EADD;padding:calc(28*var(--s)) 0 0 calc(55*var(--s))}
+.wx-l{font-weight:700;font-size:calc(13*var(--s));line-height:1.3;color:#444;letter-spacing:-.02em}
+.wx-t{display:flex;align-items:baseline;margin-top:calc(8*var(--s));white-space:nowrap}
+.wx-t b{font-family:var(--serif);font-weight:600;font-size:calc(38*var(--s));line-height:calc(46*var(--s));letter-spacing:-.02em}
+.wx-t .deg{font-family:var(--serif);font-weight:600;font-size:calc(32*var(--s));margin-left:calc(8*var(--s))}
+.wx-t .sky{font-weight:700;font-size:calc(20*var(--s));margin-left:calc(10*var(--s))}
+.live{display:inline-flex;align-items:center;margin:calc(16*var(--s)) 0 0 calc(3*var(--s));height:calc(47*var(--s));padding:0 calc(16*var(--s));background:#003C25;color:#fff;font-weight:600;font-size:calc(16*var(--s));letter-spacing:-.02em;border-radius:2px;white-space:nowrap}
+.wk{flex:1;min-width:0;background:#fff;padding:calc(28*var(--s)) calc(60*var(--s)) 0 calc(64*var(--s))}
+.wk-head{display:flex;align-items:center;height:calc(32*var(--s))}
+.wk-head strong{font-weight:600;font-size:calc(22*var(--s));letter-spacing:-.02em}
+.arr{display:flex;gap:calc(8*var(--s));margin-left:calc(24*var(--s))}
+.arr button{width:calc(32*var(--s));height:calc(32*var(--s));color:#221F1F}
+.arr button:disabled{color:#c8c8c8}
+.arr svg{width:100%;height:100%}
+.wk-head .all{margin-left:auto;font-weight:600;font-size:calc(14*var(--s));color:#1C7144}
+.days{display:flex;gap:calc(8*var(--s));margin-top:calc(18*var(--s));overflow-x:auto;scrollbar-width:none}
+.days::-webkit-scrollbar{display:none}
+.day{flex:none;width:calc(60*var(--s));height:calc(74*var(--s));padding-top:calc(8*var(--s));border-radius:4px;display:flex;flex-direction:column;align-items:center;color:#221F1F;transition:background .25s}
+.day b{font-weight:400;font-size:calc(15*var(--s));line-height:calc(20*var(--s))}
+.day em{font-style:normal;font-size:calc(12*var(--s));line-height:calc(16*var(--s));margin-top:calc(14*var(--s));white-space:nowrap}
+.day.sun b{color:#E9192D} .day.sat b{color:#3D619F} .day.past b{color:#BFBFBF}
+.day.off em{color:#8B9C95}
+.day:not(:disabled):hover{background:#F4F1EA}
+.day:disabled{cursor:default}
+
+/* ===== mobile (MOB-B-0 914:14016, 360 기준 / 상태바 44 제외) ===== */
+@media (max-width:768px){
+  :root{--m:calc(100vw / 360)}
+  .intro .col{font-size:calc(20*var(--m));width:calc(28.4*var(--m))}
+  .intro .c1{margin:calc(-146*var(--m)) 0 0 calc(2.1*var(--m))}
+  .intro .c2{margin:calc(-8.8*var(--m)) 0 0 calc(-30*var(--m))}
+  .intro .tree{width:calc(86.2*var(--m));height:calc(116*var(--m));margin:calc(-50*var(--m)) 0 0 calc(-43.1*var(--m))}
+  .intro .skip{right:16px;bottom:24px}
+
+  .hero{height:calc(582*var(--m));min-height:0}          /* 전경(oj2) 하단까지 */
+  .hero{background:var(--deep)}
+  .stage{left:0;top:0;bottom:auto;width:100%;height:100%;transform:none}
+  .ly.bg{-webkit-mask-image:none;mask-image:none}
+  .ly.bg{left:0;top:calc(-44*var(--m));width:100%;height:calc(640*var(--m))}
+  .ly.bg2{display:block;left:0;top:calc(64*var(--m));width:100%;height:calc(399*var(--m))}
+  .ly.oj1{left:calc(-198.6*var(--m));top:calc(134.7*var(--m));width:calc(755.6*var(--m));height:calc(364.3*var(--m))}
+  .ly.oj3{left:calc(-46*var(--m));top:calc(443*var(--m));width:calc(465*var(--m));height:calc(83*var(--m))}
+  .ly.oj2{left:calc(-82.5*var(--m));top:calc(486*var(--m));width:calc(528.2*var(--m));height:calc(95.7*var(--m))}
+
+  .hd::before{height:calc(64*var(--m))}
+  .hd{height:calc(64*var(--m));padding:0 calc(8*var(--m)) 0 calc(16*var(--m));display:flex;align-items:center;gap:calc(6*var(--m))}
+  .hd .logo{position:static;width:calc(84.6*var(--m))}
+  .hd nav{display:none}
+  .hd .act{position:static;margin-left:auto;gap:calc(6*var(--m));align-items:center}
+  .btn{height:auto;padding:calc(6*var(--m)) calc(8*var(--m));font-size:calc(12*var(--m));line-height:1.44}
+  .btn.visit{display:none}
+  .burger{display:block;width:calc(44*var(--m));height:calc(44*var(--m))}
+  .burger svg{display:block;width:100%;height:100%}
+  .hd .line{left:calc(16*var(--m));right:calc(16*var(--m));top:calc(64*var(--m))}
+  .copy{top:calc(149*var(--m));font-size:calc(22*var(--m))}
+
+  .gal{height:auto;display:flex;flex-direction:column;gap:calc(40*var(--m));padding:calc(12*var(--m)) 0 calc(64*var(--m));
+    position:relative;z-index:1;margin-top:calc(-80*var(--m));transform:translateY(calc(80*var(--m)));   /* 모바일 교차: 스크롤하면 80만큼 살짝 덮음 */
+    background:linear-gradient(180deg,transparent 0,transparent calc(92*var(--m)),var(--deep) calc(92*var(--m)))}
+  .ft{position:relative;z-index:1}
+  .gal .ph,.gal .emblem{position:relative;left:auto;top:auto;width:100%}
+  .ph.view{height:calc(515*var(--m))} .ph.course{height:calc(462*var(--m))}
+  .ph.glove{height:calc(429*var(--m))} .ph.food{height:calc(466*var(--m))} .ph.cart{height:calc(429*var(--m))}
+  .emblem{height:auto;padding:calc(24*var(--m)) 0}
+  .emblem i{width:calc(140.6*var(--m));height:calc(189*var(--m));transform:none}
+  /* 시안 순서: 창밖 풍경 → 엠블럼 → 코스 → 장갑 → 메뉴 → 카트 */
+  .ph.view{order:0} .emblem{order:1} .ph.course{order:2} .ph.glove{order:3} .ph.food{order:4} .ph.cart{order:5}
+
+  .ft{height:auto;display:flex;flex-direction:column;gap:calc(20*var(--m));padding:calc(32*var(--m)) calc(16*var(--m)) calc(40*var(--m))}
+  .ft .logo,.ft nav,.ft hr,.ft address{position:static}
+  .ft .logo{width:calc(84.6*var(--m))}
+  .ft nav{gap:calc(24*var(--m));font-size:calc(14*var(--m));line-height:1.4}
+  .ft .lang{gap:calc(4*var(--m))} .ft .lang span{min-width:0}
+  .ft .lang svg{width:calc(24*var(--m));height:calc(24*var(--m))}
+  .ft hr{width:100%;background:rgba(255,255,255,.2)}
+  .ft address{font-size:calc(13*var(--m));line-height:1.54;color:rgba(255,255,255,.6);white-space:normal}
+  .ft address .d{display:none} .ft address .m{display:block}
+
+  /* 회원 로그인 (MOB-B-1 login 914:14095, 상태바 44 제외) */
+  .hd .user{margin-top:0;gap:calc(4*var(--m));font-size:calc(15*var(--m))}
+  .hd .user svg{width:calc(20*var(--m));height:calc(20*var(--m))}
+  .member{height:auto;min-height:0;background:#fff}
+  .mbg{position:relative;inset:auto;height:calc(610*var(--m))}
+  .mbg img{object-position:57% 50%}
+  .mcopy{left:calc(20*var(--m));top:calc(116*var(--m));font-size:calc(24*var(--m))}
+  .band{position:static;height:auto;display:block}
+  .wx{position:absolute;left:0;right:0;top:calc(337*var(--m));width:auto;height:calc(81*var(--m));background:none;color:#fff;padding:calc(12*var(--m)) calc(24*var(--m)) 0}
+  .wx-l{color:#fff;font-size:calc(11*var(--m))}
+  .wx-t{margin-top:calc(5*var(--m))}
+  .wx-t b{font-size:calc(30*var(--m));line-height:calc(37*var(--m))}
+  .wx-t .deg{font-size:calc(25*var(--m));margin-left:calc(6*var(--m))}
+  .wx-t .sky{font-size:calc(16*var(--m));margin-left:calc(8*var(--m))}
+  .live{position:absolute;right:calc(24*var(--m));top:calc(20*var(--m));margin:0;height:calc(40*var(--m));padding:0 calc(14*var(--m));font-size:calc(14*var(--m))}
+  .myres{left:calc(20*var(--m));right:auto;top:calc(418*var(--m));bottom:auto;width:calc(320*var(--m));height:calc(172*var(--m));padding:calc(20*var(--m))}
+  .myres-top{font-size:calc(13*var(--m))}
+  .tag{font-size:calc(11*var(--m));padding:calc(5*var(--m)) calc(12*var(--m))}
+  .myres .kind{margin-top:calc(18*var(--m));font-size:calc(15*var(--m))}
+  .myres .when{font-size:calc(26*var(--m))}
+  .myres .info{margin-top:calc(10*var(--m));font-size:calc(15*var(--m));padding-left:calc(6*var(--m))}
+  .myres .info i{margin:0 calc(6*var(--m))}
+  .wk{padding:calc(20*var(--m)) 0 calc(24*var(--m)) calc(20*var(--m))}
+  .wk-head{height:calc(60*var(--m));padding-right:calc(24*var(--m))}
+  .wk-head strong{font-size:calc(20*var(--m))}
+  .arr{gap:calc(7*var(--m));margin-left:calc(12*var(--m))}
+  .arr button{width:calc(28*var(--m));height:calc(28*var(--m))}
+  .wk-head .all{font-size:calc(14*var(--m))}
+  .days{gap:calc(4*var(--m));margin-top:calc(12*var(--m));padding-right:calc(20*var(--m))}   /* 가로 스크롤 */
+  .day{width:calc(54*var(--m));height:calc(74*var(--m));padding-top:calc(8*var(--m))}
+  .day b{font-size:calc(15*var(--m));line-height:calc(20*var(--m))}
+  .day em{font-size:calc(12*var(--m));line-height:calc(16*var(--m));margin-top:calc(14*var(--m))}
+}
+@media (prefers-reduced-motion:reduce){ .intro{display:none} }
+</style>
+</head>
+<body>
+
+<!-- B-0 인트로: 클릭하면 건너뜀 -->
+<div class="intro" id="intro" aria-hidden="true">
+  <p class="col c1"><span>숲</span><span>이</span><span>먼</span><span>저</span><span>맞</span><span>이</span><span>하</span><span>는</span><span>곳,</span></p>
+  <p class="col c2"><span>신</span><span>뢰</span><span>해</span><span>온</span><span>자</span><span>리.</span></p>
+  <div class="tree"><img src="assets/tree-dark.png" alt=""></div>
+  <span class="skip">SKIP</span>
+</div>
+
+<!-- 헤더: 스크롤 끝까지 항상 최상단 고정 (어떤 섹션에도 가려지지 않도록 main 밖에 둠) -->
+  <header class="hd">
+    <a href="#" class="home" aria-label="곤지암골프클럽 홈"><img class="logo" src="assets/logo-a.png" alt="KONJIAM GOLF CLUB"></a>
+    <nav><a href="#">클럽소개</a><a href="#" class="m-item">운영안내</a><a href="#" class="m-item">예약</a><a href="#">코스</a><a href="#">클럽하우스</a><a href="#" class="m-item">정보마당</a><a href="#" class="m-item">회원라운지</a></nav>   <!-- 로그인 전 3개(941:14712) / 로그인 후 7개(1:646) — 한 메뉴에서 항목만 표시 전환 -->
+    <div class="act">
+      <a class="btn visit g-only" href="#">처음 방문안내</a>
+      <a class="btn g-only" href="#member" id="toMember">회원고객전용</a>
+      <a class="user m-only" href="#" aria-label="한지훈님 내 정보"><span>한지훈님</span><svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><g opacity="0.9"><mask id="pf" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="0" y="0" width="20" height="20"><circle cx="10" cy="10" r="10" fill="#D9D9D9"/></mask><g mask="url(#pf)"><path d="M6.81792 11.3633C9.54519 11.3633 10.4543 11.3633 13.1816 11.3633C13.1816 17.7269 14.0906 27.2724 17.727 31.8178C14.9997 31.8178 4.99973 31.8178 2.27246 31.8178C5.90882 27.2724 6.81792 17.7269 6.81792 11.3633Z" fill="#201E1E"/><path d="M7.54694 6.22909C7.46711 5.61374 7.91273 5 8.53323 5C9.42906 5 10.5704 5 11.4662 5C12.0867 5 12.5324 5.61374 12.4525 6.22909C12.364 6.91182 12.364 7.63364 12.4525 8.31636C12.5324 8.93171 12.0867 9.54545 11.4662 9.54545C10.5704 9.54545 9.42906 9.54545 8.53323 9.54545C7.91273 9.54545 7.46711 8.93171 7.54694 8.31636C7.63551 7.63364 7.63551 6.91182 7.54694 6.22909Z" fill="#201E1E"/></g><circle cx="10" cy="10" r="9.3" stroke="#201E1E" stroke-width="1.4"/></g></svg></a>
+      <button class="burger" aria-label="메뉴"><svg viewBox="0 0 44 44" fill="none" aria-hidden="true"><rect x="12" y="14" width="20" height="2" fill="#201E1E"/><rect x="12" y="21" width="20" height="2" fill="#201E1E"/><rect x="12" y="28" width="20" height="2" fill="#201E1E"/></svg></button>
+    </div>
+    <i class="line"></i>
+  </header>
+
+<main>
+  <!-- 회원 로그인 화면 (B-1 login 914:13926 / MOB 914:14095) -->
+  <section class="member" id="member" aria-label="회원 메인">
+    <div class="mbg" aria-hidden="true"><img src="assets/member-bg.jpg" alt=""></div>
+    <h1 class="mcopy"><span>어서오세요.</span><span>곤지암 골프클럽 입니다.</span></h1>
+    <div class="myres">
+      <div class="myres-top"><b>MY RESERVATION</b><span class="tag">예약확정</span></div>
+      <p class="kind">평일</p>
+      <p class="when">09.01 (월) / 10시 40분</p>
+      <p class="info">Lake<i>・</i>5인승<i>・</i>캐디 1</p>
+    </div>
+    <div class="band">
+      <div class="wx">
+        <p class="wx-l">오늘 날씨</p>
+        <p class="wx-t"><b>25.5</b><span class="deg">℃</span><span class="sky">/ 맑음</span></p>
+        <a class="live" href="#">실시간 곤지암GC 현장</a>
+      </div>
+      <div class="wk">
+        <div class="wk-head"><strong>2026.09</strong>
+          <span class="arr"><button aria-label="이전 주" disabled><svg viewBox="0 0 32 32"><path d="M19.3 9.3 12.7 16l6.6 6.7" stroke="currentColor" stroke-width="1.6" fill="none"/></svg></button><button aria-label="다음 주"><svg viewBox="0 0 32 32"><path d="M12.7 9.3 19.3 16l-6.6 6.7" stroke="currentColor" stroke-width="1.6" fill="none"/></svg></button></span>
+          <a href="#" class="all">전체 일정</a></div>
+        <div class="days"><button class="day sun"><b>13</b><em>예약가능</em></button><button class="day "><b>14</b><em>예약가능</em></button><button class="day "><b>15</b><em>예약가능</em></button><button class="day "><b>16</b><em>예약종료</em></button><button class="day  off"><b>17</b><em>미오픈</em></button><button class="day "><b>18</b><em>예약종료</em></button><button class="day sat off"><b>19</b><em>미오픈</em></button><button class="day sun"><b>20</b><em>예약가능</em></button><button class="day "><b>21</b><em>예약가능</em></button><button class="day "><b>22</b><em>예약가능</em></button><button class="day "><b>23</b><em>예약가능</em></button><button class="day "><b>24</b><em>예약가능</em></button><button class="day past" disabled><b>6</b><em></em></button><button class="day past" disabled><b>7</b><em></em></button><button class="day past" disabled><b>8</b><em></em></button><button class="day past" disabled><b>9</b><em></em></button><button class="day today off"><b>10</b><em>종료</em></button><button class="day  off"><b>11</b><em>미오픈</em></button><button class="day sat"><b>12</b><em>예약가능</em></button><button class="day "><b>13</b><em>예약가능</em></button></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- B-1 키비주얼 -->
+  <section class="hero" id="hero">
+    <div class="stage" aria-hidden="true">
+      <div class="ly bg"><picture><source media="(max-width:768px)" srcset="assets/m-kv-bg.jpg"><img src="assets/kv-bg-x.jpg" alt=""></picture></div>
+      <div class="ly bg2"><img src="assets/m-kv-bg2.jpg" alt=""></div>
+      <div class="ly oj1"><img src="assets/oj1-x.webp" alt=""></div>
+      <div class="ly oj3"><img src="assets/oj3.webp" alt=""></div>
+      <div class="ly oj2"><img src="assets/oj2-x.webp" alt=""></div>
+    </div>
+
+
+    <h1 class="copy"><span>자연 속으로 들어서는 곳,</span><span>곤지암 골프클럽입니다.</span></h1>
+  </section>
+
+  <!-- B-2 사진 콜라주 -->
+  <section class="gal" aria-label="곤지암골프클럽 풍경">
+    <figure class="ph view"><picture><source media="(max-width:768px)" srcset="assets/m-view.webp"><img src="assets/p-view.webp" alt="클럽하우스 창밖으로 보이는 코스 풍경"></picture></figure>
+    <div class="emblem" aria-hidden="true"><i><img src="assets/tree-light.png" alt=""></i></div>
+    <figure class="ph course"><picture><source media="(max-width:768px)" srcset="assets/m-course.jpg"><img src="assets/p-course.webp" alt="안개 낀 산자락과 그린"></picture></figure>
+    <figure class="ph glove"><img src="assets/p-glove.jpg" alt="티 위에 공을 올리는 손"></figure>
+    <figure class="ph food"><img src="assets/p-food.jpg" alt="클럽하우스 한식 상차림"></figure>
+    <figure class="ph cart"><img src="assets/p-cart.jpg" alt="카트에서 바라본 코스"></figure>
+  </section>
+
+  <footer class="ft">
+    <img class="logo" src="assets/logo-white.png" alt="KONJIAM GOLF CLUB">
+    <nav><a href="#">약관 및 정책</a><a href="#">문의하기</a>
+      <a href="#" class="lang"><span>언어</span><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M7 9.5L12 14.5L17 9.5" stroke="#fff" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></a></nav>
+    <hr>
+    <address>
+      <span class="d">대표이사 : 이재웅 | 개인정보보호책임자 : 정현 | 사업자등록번호 : 107-86-09325 | 통신판매업 등록번호 : 제2018-서울강서-0325 호</span>
+      <span class="m">대표이사 : 이재웅 | 개인정보보호책임자 : 정현</span>
+      <span class="m">사업자등록번호 : 107-86-09325</span>
+      <span class="m">통신판매업 등록번호 : 제2018-서울강서-0325 호</span>
+      <span>Copyright ⓒ 2026 D&amp;O. All Rights Reserved.</span>
+    </address>
+  </footer>
+</main>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script src="https://unpkg.com/lenis@1.1.13/dist/lenis.min.js"></script>
+<script>
+gsap.registerPlugin(ScrollTrigger);
+const $ = (s, r = document) => r.querySelector(s);
+const $$ = (s, r = document) => [...r.querySelectorAll(s)];
+const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+const skipIntro = reduce || location.hash === '#nointro' || location.hash === '#member';
+
+/* 부드러운 스크롤 (인트로 동안 정지) */
+const lenis = new Lenis({ lerp: .1 });
+lenis.on('scroll', ScrollTrigger.update);
+gsap.ticker.add(t => lenis.raf(t * 1000));
+gsap.ticker.lagSmoothing(0);
+lenis.stop();
+const unlock = () => { document.documentElement.classList.remove('lock'); lenis.start(); initReveals(); initEmblem(); ScrollTrigger.refresh(); };
+
+/* ===== 인트로 → 키비주얼 조립 =====
+   문구 블러→선명 → 문구 블러 디졸브 퇴장 + 소나무 심볼 등장 → 심볼 퇴장 + 배경 블러→선명
+   → 건물 → 소나무 → 표지석 → 전경 → 카피·헤더 (등장 후 멈춤, 스크롤 해제) */
+const B = v => `blur(${v}px)`;
+const intro = $('#intro');
+const L = { bg: $('.ly.bg'), bg2: $('.ly.bg2'), oj1: $('.ly.oj1'), oj3: $('.ly.oj3'), oj2: $('.ly.oj2') };
+const hd = $('.hd'), copy = $('.copy');
+
+gsap.set([L.oj3, L.oj2, copy, hd.querySelector('.home'), hd.querySelector('nav'), hd.querySelector('.act')], { autoAlpha: 0 });
+gsap.set(hd.querySelector('.line'), { scaleX: 0 });
+gsap.set([L.bg, L.bg2, L.oj1], { autoAlpha: 0, filter: B(30), scale: 1.08 });
+gsap.set(L.oj1, { transformOrigin: '50% 45.6%' });   /* 배경과 같은 중심으로 확대·축소 (어긋남 방지) */
+
+const tl = gsap.timeline({ paused: true, defaults: { ease: 'power2.out' }, onComplete: () => { intro.remove(); unlock(); } });
+/* 문구: 읽는 순서(오른쪽 줄 → 왼쪽 줄)대로 한 글자씩 흐르듯 등장 → 같은 순서로 사라짐 → 나무 등장·퇴장 → 메인 */
+const chars = $$('.intro .c1 span, .intro .c2 span');
+gsap.set(['.intro .col', '.intro .tree'], { autoAlpha: 1 });
+gsap.set(chars, { autoAlpha: 0 });
+gsap.set('.intro .tree', { autoAlpha: 0 });
+tl.fromTo(chars, { autoAlpha: 0, y: -10, filter: B(8) }, { autoAlpha: 1, y: 0, filter: B(0), duration: .55, stagger: .07, ease: 'power2.out' })
+  .to(chars, { autoAlpha: 0, y: 10, filter: B(8), duration: .45, stagger: .05, ease: 'power1.in' }, '+=.5')
+  .fromTo('.intro .tree', { autoAlpha: 0, filter: B(16), scale: .94 }, { autoAlpha: 1, filter: B(0), scale: 1, duration: .9 }, '-=.35')
+  .to('.intro .tree', { autoAlpha: 0, filter: B(14), duration: .6, ease: 'power1.in' }, '+=.45')
+  .to('.intro .skip', { autoAlpha: 0, duration: .3 }, '<')
+  .to(intro, { autoAlpha: 0, duration: .8, ease: 'power1.inOut' }, '<.2')
+  .addLabel('kv', '<')
+  .to([L.bg, L.bg2, L.oj1], { autoAlpha: 1, filter: B(0), scale: 1, duration: 1.5, ease: 'power3.out' }, 'kv')   /* 배경 + 클럽하우스·소나무 */
+  /* KV-oj3 · KV-oj2만 아래에서 스르륵 */
+  .fromTo(L.oj3, { autoAlpha: 0, yPercent: 60 }, { autoAlpha: 1, yPercent: 0, duration: 1.3, ease: 'power2.out' }, 'kv+=.8')
+  .fromTo(L.oj2, { autoAlpha: 0, yPercent: 35 }, { autoAlpha: 1, yPercent: 0, duration: 1.4, ease: 'power2.out' }, 'kv+=1.05')
+  .fromTo(copy, { autoAlpha: 0, y: 16, filter: B(10) }, { autoAlpha: 1, y: 0, filter: B(0), duration: 1.0 }, 'kv+=1.8')
+  .fromTo([hd.querySelector('.home'), hd.querySelector('nav'), hd.querySelector('.act')], { autoAlpha: 0, y: -10 }, { autoAlpha: 1, y: 0, duration: .7, stagger: .06 }, 'kv+=2.1')
+  .to(hd.querySelector('.line'), { scaleX: 1, duration: .9, ease: 'power3.inOut' }, '<');
+
+/* 헤더 고정 + 스크롤하면 배경(그라디언트 블러) 표시 */
+const onScroll = y => hd.classList.toggle('is-scrolled', y > 8);
+lenis.on('scroll', e => onScroll(e.scroll));
+addEventListener('scroll', () => onScroll(scrollY), { passive: true });
+onScroll(scrollY);
+
+window.__introTL = tl;   /* 확인용: 콘솔에서 __introTL.seek('kv') 등 */
+const start = () => skipIntro ? tl.progress(1) : tl.play();
+intro.addEventListener('click', () => tl.timeScale(5));          /* 클릭: 빠르게 건너뛰기 */
+document.fonts.ready.then(() => requestAnimationFrame(start));
+
+/* ===== 회원고객전용 → 로그인 화면 전환 / 로고 → 로그인 전 (#member 딥링크) ===== */
+const memberIn = () => {
+  const m = $('#member');
+  return gsap.timeline()
+    .fromTo('.mbg img', { scale: 1.08, filter: B(16) }, { scale: 1, filter: B(0), duration: 1.6, ease: 'power3.out' })
+    .fromTo('.mcopy span', { autoAlpha: 0, y: 24, filter: B(10) }, { autoAlpha: 1, y: 0, filter: B(0), duration: 1.1, stagger: .12, ease: 'power3.out' }, .35)
+    .fromTo(['.wx', '.wk'], { autoAlpha: 0, y: 50 }, { autoAlpha: 1, y: 0, duration: 1.1, stagger: .08, ease: 'power3.out' }, .5)   /* .band에 transform을 주면 모바일 날씨(absolute) 기준이 바뀌므로 자식에 적용 */
+    .fromTo('.myres', { autoAlpha: 0, y: 40 }, { autoAlpha: 1, y: 0, duration: 1.1, ease: 'power3.out' }, .7)
+    .fromTo('.day', { autoAlpha: 0, y: 10 }, { autoAlpha: 1, y: 0, duration: .5, stagger: .03, ease: 'power2.out' }, .9);
+};
+const setMember = (on, animate = true) => {
+  const go = () => {
+    document.body.classList.toggle('is-member', on);
+    window.scrollTo(0, 0); lenis.scrollTo(0, { immediate: true });
+    ScrollTrigger.refresh();
+    if (on && animate) memberIn();
+    gsap.to('main', { autoAlpha: 1, duration: .5 });
+  };
+  if (!animate) return go();
+  gsap.to('main', { autoAlpha: 0, duration: .4, ease: 'power1.in', onComplete: go });
+};
+/* 회원고객전용 → 로그인 화면, (로그인 상태) 로고 → 로그인 전. 그 외 링크·버튼은 이동하지 않음 */
+document.addEventListener('click', e => { const a = e.target.closest('a[href="#"]'); if (a) e.preventDefault(); });
+$('#toMember').addEventListener('click', e => { e.preventDefault(); history.replaceState(null, '', '#member'); setMember(true); });
+$('.hd .home').addEventListener('click', e => { e.preventDefault();
+  if (document.body.classList.contains('is-member')) { history.replaceState(null, '', location.pathname); setMember(false); } });
+if (location.hash === '#member') setMember(true, false), requestAnimationFrame(memberIn);
+
+/* ===== 키비주얼 스크롤 패럴랙스 (레이어별 속도 차) ===== */
+const heroScroll = { trigger: '#hero', start: 'top top', end: 'bottom top', scrub: true };
+gsap.timeline({ scrollTrigger: heroScroll })
+  .to([L.bg, L.bg2], { yPercent: 12, ease: 'none' }, 0)      /* 먼 곳일수록 느리게(아래로 밀림) */
+  .to([L.oj1, L.oj3, L.oj2], { y: () => L.oj1.offsetHeight * .04, ease: 'none' }, 0)   /* 전경 레이어는 한 묶음으로 (틈 방지) */
+  .to(copy, { yPercent: 120, opacity: 0, ease: 'none' }, 0);
+
+/* ===== B-1 ↔ B-2 교차: 메인이 한 화면 올라가는 동안 B-2는 240만큼 더 올라옴 (PC) ===== */
+const cross = { trigger: '#hero', start: 'top top', end: 'bottom top', scrub: true, invalidateOnRefresh: true };
+gsap.matchMedia()
+  .add('(min-width: 769px)', () => {
+    gsap.fromTo('.gal', { y: () => innerWidth / 1920 * 240 }, { y: 0, ease: 'none', immediateRender: true, scrollTrigger: cross });
+  })
+  .add('(max-width: 768px)', () => {   /* 모바일: 80 */
+    gsap.fromTo('.gal', { y: () => innerWidth / 360 * 80 }, { y: 0, ease: 'none', immediateRender: true, scrollTrigger: { ...cross } });
+  });
+
+/* ===== B-2 사진 등장: 아래에서 마스크 리빌 + 줌아웃, 위로 스크롤 시 역순 퇴장 ===== */
+/* 첫 화면에 겹쳐 보이는 사진(창밖·코스)도 인트로가 끝난 뒤 등장하도록 해제 시점에 생성 */
+gsap.set('.ph', { clipPath: 'inset(100% 0% 0% 0%)' });
+const initReveals = () => $$('.ph').forEach(ph => {
+  const img = $('img', ph);
+  gsap.timeline({ scrollTrigger: { trigger: ph, start: 'top 88%', toggleActions: 'play none none reverse' } })
+    .fromTo(ph, { clipPath: 'inset(100% 0% 0% 0%)' }, { clipPath: 'inset(0% 0% 0% 0%)', duration: 1.3, ease: 'power3.inOut' })
+    .fromTo(img, { scale: 1.18 }, { scale: 1, duration: 1.8, ease: 'power2.out' }, 0);
+});
+gsap.set('.emblem i', { autoAlpha: 0 });
+const initEmblem = () => gsap.fromTo('.emblem i', { autoAlpha: 0, filter: B(18), scale: .92 },
+  { autoAlpha: 1, filter: B(0), scale: 1, duration: 1.4, ease: 'power2.out',
+    scrollTrigger: { trigger: '.emblem', start: 'top 80%', toggleActions: 'play none none reverse' } });
+</script>
+</body>
+</html>
